@@ -1,6 +1,7 @@
-import logging
 from pathlib import Path
 from typing import List
+
+import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -66,9 +67,14 @@ def calculate_list_safety_with_redundance(input_list: List[List[int]]) -> int:
     return safe_count
 
 
-def read_list_from_file(file_name: str) -> List[int]:
+def read_input_from_file(file_name: str) -> List[int]:
     '''
-    Read a list of integer sequences from a file.
+    Reads the contents of a .txt file and returns a list of integers.
+
+    Args:
+        file_name (str): The name of the .txt file to be read.
+    Returns:
+        str: The contents of the file.
     '''
     try:
 
@@ -82,7 +88,7 @@ def read_list_from_file(file_name: str) -> List[int]:
 
 def main():
     try:
-        input: list = read_list_from_file('input.txt')
+        input: list = read_input_from_file('input.txt')
 
         # Part one | Expected result: 379
         part_one_result = calculate_list_safety(input)

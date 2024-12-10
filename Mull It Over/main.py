@@ -1,5 +1,9 @@
-from pathlib import Path
 import re
+from pathlib import Path
+
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def extract_and_calculate_multiplications(input_string: str) -> int:
@@ -52,18 +56,39 @@ def extract_and_calculate_enabled_multiplications(input_string: str) -> int:
     return sum(abs(item[0] * item[1]) for item in sanitized_enabled_matches)
 
 
-def read_list_from_file(file_name: str) -> str:
-    file_path = Path(__file__).parent / file_name
-    with file_path.open('r', encoding='utf-8') as file:
-        return file.read()
+def read_input_from_file(file_name: str) -> str:
+    '''
+    Reads the contents of a .txt file and returns it as a string.
+
+    Args:
+        file_name (str): The name of the .txt file to be read.
+    Returns:
+        str: The contents of the file.
+    '''
+    try:
+        file_path = Path(__file__).parent / file_name
+        with file_path.open('r', encoding='utf-8') as file:
+            return file.read()
+    except FileNotFoundError as e:
+        logging.error('File not found: %s, Error: %s', file_name, e)
+        raise
 
 
-input = read_list_from_file('input.txt')
+def main():
+    try:
+        input: str = read_input_from_file('input.txt')
 
-# Part one | Expected result: 165,225,049
-response = extract_and_calculate_multiplications(input)
-print(f'Part one result: {response}')
+        # Part one | Expected result: 165,225,049
+        part_one_result = extract_and_calculate_multiplications(input)
+        logging.info('Part one result: %s', part_one_result)
 
-# Part two | Expected result: 108,830,766
-response = extract_and_calculate_enabled_multiplications(input)
-print(f'Part two result: {response}')
+        # Part two | Expected result: 108,830,766
+        part_two_result = extract_and_calculate_enabled_multiplications(input)
+        logging.info('Part tow result: %s', part_two_result)
+
+    except Exception as e:
+        logging.error('An error occurred: %s', e)
+
+
+if __name__ == '__main__':
+    main()
