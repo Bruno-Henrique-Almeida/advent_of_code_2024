@@ -41,7 +41,7 @@ def calculate_list_safety_with_redundance(input_list: List[List[int]]) -> int:
         int: The count of lists that are "safe" or can be made "safe."
     '''
 
-    def is_safe(values):
+    def is_safe(values: List):
         increasing = all(values[i] < values[i + 1] for i in range(len(values) - 1))
         decreasing = all(values[i] > values[i + 1] for i in range(len(values) - 1))
 

@@ -78,11 +78,11 @@ def main():
     try:
         input: str = read_input_from_file('input.txt')
 
-        # Part one | Expected result: 165,225,049
+        # Part one | Expected result: 165.225.049
         part_one_result = extract_and_calculate_multiplications(input)
         logging.info('Part one result: %s', part_one_result)
 
-        # Part two | Expected result: 108,830,766
+        # Part two | Expected result: 108.830.766
         part_two_result = extract_and_calculate_enabled_multiplications(input)
         logging.info('Part tow result: %s', part_two_result)
 

@@ -64,11 +64,11 @@ def main():
     try:
         input_left, input_right = read_input_from_file('input.txt')
 
-        # Part one | Expected result: 1,320,851
+        # Part one | Expected result: 1.320.851
         part_one_result = calculate_list_difference(input_left, input_right)
         logging.info('Part one result: %s', part_one_result)
 
-        # Part two | Expected result: 26,859,182
+        # Part two | Expected result: 26.859.182
         part_two_result = calculate_list_repetitions(input_left, input_right)
         logging.info('Part two result: %s', part_two_result)
 
