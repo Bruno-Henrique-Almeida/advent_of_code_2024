@@ -14,8 +14,7 @@ def calculate_list_difference(left_list: List[int], right_list: List[int]) -> in
         int: The sum of the absolute differences between corresponding elements.
     '''
 
-    total_difference: int = sum(abs(left - right) for left, right in zip(sorted(left_list), sorted(right_list)))
-    return total_difference
+    return sum(abs(left - right) for left, right in zip(sorted(left_list), sorted(right_list)))
 
 
 def calculate_list_repetitions(left_list: List[int], right_list: List[int]) -> int:
@@ -29,8 +28,7 @@ def calculate_list_repetitions(left_list: List[int], right_list: List[int]) -> i
         int: The total weighted sum of repetitions.
     '''
 
-    total_repetitions: int = sum(value * Counter(right_list).get(value, 0) for value in left_list)
-    return total_repetitions
+    return sum(value * Counter(right_list).get(value, 0) for value in left_list)
 
 
 def read_lists_from_file(file_name: str) -> Tuple[List[int], List[int]]:
