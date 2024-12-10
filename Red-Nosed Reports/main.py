@@ -1,5 +1,8 @@
+import logging
 from pathlib import Path
 from typing import List
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def calculate_list_safety(input_list: List[List[int]]) -> int:
@@ -64,18 +67,35 @@ def calculate_list_safety_with_redundance(input_list: List[List[int]]) -> int:
 
 
 def read_list_from_file(file_name: str) -> List[int]:
-    file_path = Path(__file__).parent / file_name
-    with file_path.open('r', encoding='utf-8') as file:
-        return [[int(item) for item in line.split()] for line in file]
+    '''
+    Read a list of integer sequences from a file.
+    '''
+    try:
+
+        file_path = Path(__file__).parent / file_name
+        with file_path.open('r', encoding='utf-8') as file:
+            return [[int(item) for item in line.split()] for line in file]
+    except FileNotFoundError as e:
+        logging.error('File not found: %s, Error: %s', file_name, e)
+        raise
 
 
-input = read_list_from_file('input.txt')
+def main():
+    try:
+        input: list = read_list_from_file('input.txt')
 
-# Part one | Expected result: 379
-response = calculate_list_safety(input)
-print(f'Part one result: {response}')
+        # Part one | Expected result: 379
+        part_one_result = calculate_list_safety(input)
+        logging.info('Part one result: %s', part_one_result)
 
 
-# Part two | Expected result: 430
-response = calculate_list_safety_with_redundance(input)
-print(f'Part two result: {response}')
+        # Part two | Expected result: 430
+        part_two_result = calculate_list_safety_with_redundance(input)
+        logging.info('Part two result: %s', part_two_result)
+
+    except Exception as e:
+        logging.error('An error occurred: %s', e)
+
+
+if __name__ == '__main__':
+    main()
