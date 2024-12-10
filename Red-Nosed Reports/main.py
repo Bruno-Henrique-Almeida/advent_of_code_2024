@@ -1,5 +1,5 @@
-from pathlib import Path
 from typing import List
+import utils
 
 import logging
 
@@ -17,13 +17,13 @@ def calculate_list_safety(input_list: List[List[int]]) -> int:
     '''
 
     def is_safe(values):
-        increasing = all(values[i] < values[i + 1] for i in range(len(values) - 1))
-        decreasing = all(values[i] > values[i + 1] for i in range(len(values) - 1))
+        increasing: bool = all(values[i] < values[i + 1] for i in range(len(values) - 1))
+        decreasing: bool = all(values[i] > values[i + 1] for i in range(len(values) - 1))
 
-        differences_valid = all(1 <= abs(values[i] - values[i + 1]) <= 3 for i in range(len(values) - 1))
+        differences_valid: bool = all(1 <= abs(values[i] - values[i + 1]) <= 3 for i in range(len(values) - 1))
         return (increasing or decreasing) and differences_valid
 
-    safe_count = 0
+    safe_count: int = 0
 
     for values in input_list:
         if is_safe(values):
@@ -42,13 +42,13 @@ def calculate_list_safety_with_redundance(input_list: List[List[int]]) -> int:
     '''
 
     def is_safe(values: List):
-        increasing = all(values[i] < values[i + 1] for i in range(len(values) - 1))
-        decreasing = all(values[i] > values[i + 1] for i in range(len(values) - 1))
+        increasing: bool = all(values[i] < values[i + 1] for i in range(len(values) - 1))
+        decreasing: bool = all(values[i] > values[i + 1] for i in range(len(values) - 1))
 
-        differences_valid = all(1 <= abs(values[i] - values[i + 1]) <= 3 for i in range(len(values) - 1))
+        differences_valid: bool = all(1 <= abs(values[i] - values[i + 1]) <= 3 for i in range(len(values) - 1))
         return (increasing or decreasing) and differences_valid
 
-    safe_count = 0
+    safe_count: int = 0
 
     for values in input_list:
         if is_safe(values):
@@ -63,42 +63,18 @@ def calculate_list_safety_with_redundance(input_list: List[List[int]]) -> int:
                     break
                 else:
                     continue
-
     return safe_count
-
-
-def read_input_from_file(file_name: str) -> List[int]:
-    '''
-    Reads the contents of a .txt file and returns a list of integers.
-
-    Args:
-        file_name (str): The name of the .txt file to be read.
-    Returns:
-        str: The contents of the file.
-    '''
-    try:
-
-        file_path = Path(__file__).parent / file_name
-        with file_path.open('r', encoding='utf-8') as file:
-            return [[int(item) for item in line.split()] for line in file]
-    except FileNotFoundError as e:
-        logging.error('File not found: %s, Error: %s', file_name, e)
-        raise
 
 
 def main():
     try:
-        input: list = read_input_from_file('input.txt')
+        input: List[int] = utils.read_input_from_file('input.txt')
 
-        # Part one | Expected result: 379
-        part_one_result = calculate_list_safety(input)
+        part_one_result: int = calculate_list_safety(input)
         logging.info('Part one result: %s', part_one_result)
 
-
-        # Part two | Expected result: 430
-        part_two_result = calculate_list_safety_with_redundance(input)
+        part_two_result: int = calculate_list_safety_with_redundance(input)
         logging.info('Part two result: %s', part_two_result)
-
     except Exception as e:
         logging.error('An error occurred: %s', e)
 

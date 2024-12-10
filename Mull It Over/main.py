@@ -1,5 +1,6 @@
+from typing import Pattern, List, Tuple
+import utils
 import re
-from pathlib import Path
 
 import logging
 
@@ -16,11 +17,11 @@ def extract_and_calculate_multiplications(input_string: str) -> int:
         int: The calculated sum of the absolute products.
     '''
 
-    regex = r'(mul\(\w+,\w+\))'
+    regex: Pattern[str] = r'(mul\(\w+,\w+\))'
 
-    matches = re.findall(regex, input_string)
+    matches: List[str] = re.findall(regex, input_string)
 
-    sanitized_matches = [eval(x.replace('mul', '')) for x in matches]
+    sanitized_matches: List[Tuple] = [eval(x.replace('mul', '')) for x in matches]
 
     return sum(abs(item[0] * item[1]) for item in sanitized_matches)
 
@@ -35,13 +36,13 @@ def extract_and_calculate_enabled_multiplications(input_string: str) -> int:
         int: The calculated sum of the absolute products.
     '''
 
-    regex = r"(don't\(\))|(do\(\))|(mul\(\w+,\w+\))"
+    regex: Pattern = r"(don't\(\))|(do\(\))|(mul\(\w+,\w+\))"
 
-    matches = re.findall(regex, input_string)
+    matches: re.Pattern = re.findall(regex, input_string)
 
-    ignore_mul = False
+    ignore_mul: bool = False
 
-    captured = []
+    captured: List = []
 
     for match in matches:
         if match[0] == "don't()":
@@ -51,41 +52,20 @@ def extract_and_calculate_enabled_multiplications(input_string: str) -> int:
         elif match[2].startswith("mul") and not ignore_mul:
             captured.append(match[2])
 
-    sanitized_enabled_matches = [eval(x.replace('mul', '')) for x in captured]
+    sanitized_enabled_matches: List[Tuple] = [eval(x.replace('mul', '')) for x in captured]
 
     return sum(abs(item[0] * item[1]) for item in sanitized_enabled_matches)
 
 
-def read_input_from_file(file_name: str) -> str:
-    '''
-    Reads the contents of a .txt file and returns it as a string.
-
-    Args:
-        file_name (str): The name of the .txt file to be read.
-    Returns:
-        str: The contents of the file.
-    '''
-    try:
-        file_path = Path(__file__).parent / file_name
-        with file_path.open('r', encoding='utf-8') as file:
-            return file.read()
-    except FileNotFoundError as e:
-        logging.error('File not found: %s, Error: %s', file_name, e)
-        raise
-
-
 def main():
     try:
-        input: str = read_input_from_file('input.txt')
+        input: str = utils.read_input_from_file('input.txt')
 
-        # Part one | Expected result: 165.225.049
-        part_one_result = extract_and_calculate_multiplications(input)
+        part_one_result: int = extract_and_calculate_multiplications(input)
         logging.info('Part one result: %s', part_one_result)
 
-        # Part two | Expected result: 108.830.766
-        part_two_result = extract_and_calculate_enabled_multiplications(input)
+        part_two_result: int = extract_and_calculate_enabled_multiplications(input)
         logging.info('Part tow result: %s', part_two_result)
-
     except Exception as e:
         logging.error('An error occurred: %s', e)
 
