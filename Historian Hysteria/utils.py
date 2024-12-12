@@ -3,37 +3,54 @@ from pathlib import Path
 
 
 def merge_sort(input_list: List[int]) -> List[int]:
-    if len(input_list) > 1:
-        mid: int = len(input_list) // 2
-        left_half: List[int] = input_list[:mid]
-        right_half: List[int] = input_list[mid:]
+    '''
+    Sorts a list of integers using the merge sort algorithm.
 
-        merge_sort(left_half)
-        merge_sort(right_half)
+    Args:
+        input_list (List[int]): The list of integers to sort.
 
-        i: int = 0
-        j: int = 0
-        k: int = 0
+    Returns:
+        List[int]: The sorted list.
+    '''
 
-        while i < len(left_half) and j < len(right_half):
-            if left_half[i] < right_half[j]:
-                input_list[k] = left_half[i]
-                i += 1
-            else:
-                input_list[k] = right_half[j]
-                j += 1
-            k += 1
+    if len(input_list) <= 1:
+        return input_list
 
-        while i < len(left_half):
-            input_list[k] = left_half[i]
+    mid: int = len(input_list) // 2
+    left_half: List[int] = merge_sort(input_list[:mid])
+    right_half: List[int] = merge_sort(input_list[mid:])
+
+    return _merge(left_half, right_half)
+
+
+def _merge(left: List[int], right: List[int]) -> List[int]:
+    '''
+    Merges two sorted lists into a single sorted list.
+
+    Args:
+        left (List[int]): The first sorted list.
+        right (List[int]): The second sorted list.
+
+    Returns:
+        List[int]: The merged and sorted list.
+    '''
+
+    merged = []
+
+    i: int = 0
+    j: int = 0
+
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            merged.append(left[i])
             i += 1
-            k += 1
-
-        while j < len(right_half):
-            input_list[k] = right_half[j]
+        else:
+            merged.append(right[j])
             j += 1
-            k += 1
-    return input_list
+
+    merged.extend(left[i:])
+    merged.extend(right[j:])
+    return merged
 
 
 def read_input_from_file(file_name: str) -> Tuple[List[int], List[int]]:
@@ -45,6 +62,7 @@ def read_input_from_file(file_name: str) -> Tuple[List[int], List[int]]:
     Returns:
         Tuple[List[int], List[int]]: Two lists of integers extracted from the file.
     '''
+
     try:
         file_path: Path = Path(__file__).parent / file_name
         with file_path.open('r', encoding='utf-8') as file:

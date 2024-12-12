@@ -1,10 +1,10 @@
 from collections import Counter
 from typing import List
-
-import utils
 import logging
+import utils
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def calculate_list_difference(left_list: list[int], right_list: list[int]) -> int:
@@ -42,10 +42,12 @@ def main():
 
         input_left, input_right = utils.read_input_from_file('input.txt')
 
-        part_one_result: int = calculate_list_difference(input_left, input_right)
+        part_one_result: int = calculate_list_difference(
+            input_left, input_right)
         logging.info('Part one result: %s', part_one_result)
 
-        part_two_result: int = calculate_list_repetitions(input_left, input_right)
+        part_two_result: int = calculate_list_repetitions(
+            input_left, input_right)
         logging.info('Part two result: %s', part_two_result)
     except Exception as e:
         logging.error('An error occurred: %s', e)

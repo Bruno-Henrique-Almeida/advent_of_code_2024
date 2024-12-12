@@ -1,10 +1,10 @@
-from typing import Pattern, List, Tuple
+from typing import Pattern, List, Tuple, Generator
+import logging
 import utils
 import re
 
-import logging
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def extract_and_calculate_multiplications(input_string: str) -> int:
@@ -18,12 +18,13 @@ def extract_and_calculate_multiplications(input_string: str) -> int:
     '''
 
     regex: Pattern[str] = r'(mul\(\w+,\w+\))'
+    matches: Generator = (match.group()
+                          for match in re.finditer(regex, input_string))
 
-    matches: List[str] = re.findall(regex, input_string)
+    parsed_values: Generator = (
+        utils.parse_mul_expression(match) for match in matches)
 
-    sanitized_matches: List[Tuple] = [eval(x.replace('mul', '')) for x in matches]
-
-    return sum(abs(item[0] * item[1]) for item in sanitized_matches)
+    return sum(abs(a * b) for a, b in parsed_values)
 
 
 def extract_and_calculate_enabled_multiplications(input_string: str) -> int:
@@ -37,24 +38,26 @@ def extract_and_calculate_enabled_multiplications(input_string: str) -> int:
     '''
 
     regex: Pattern = r"(don't\(\))|(do\(\))|(mul\(\w+,\w+\))"
-
-    matches: re.Pattern = re.findall(regex, input_string)
+    matches: Generator = (match.group()
+                          for match in re.finditer(regex, input_string))
 
     ignore_mul: bool = False
-
     captured: List = []
 
     for match in matches:
-        if match[0] == "don't()":
+        if match == "don't()":
             ignore_mul = True
-        elif match[1] == "do()":
+            continue
+        if match == 'do()':
             ignore_mul = False
-        elif match[2].startswith("mul") and not ignore_mul:
-            captured.append(match[2])
+            continue
+        if match.startswith('mul') and not ignore_mul:
+            captured.append(match)
 
-    sanitized_enabled_matches: List[Tuple] = [eval(x.replace('mul', '')) for x in captured]
+    parsed_values: Generator = (
+        utils.parse_mul_expression(match) for match in captured)
 
-    return sum(abs(item[0] * item[1]) for item in sanitized_enabled_matches)
+    return sum(abs(a * b) for a, b in parsed_values)
 
 
 def main():
@@ -64,7 +67,8 @@ def main():
         part_one_result: int = extract_and_calculate_multiplications(input)
         logging.info('Part one result: %s', part_one_result)
 
-        part_two_result: int = extract_and_calculate_enabled_multiplications(input)
+        part_two_result: int = extract_and_calculate_enabled_multiplications(
+            input)
         logging.info('Part tow result: %s', part_two_result)
     except Exception as e:
         logging.error('An error occurred: %s', e)

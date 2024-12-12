@@ -11,6 +11,7 @@ def read_input_from_file(file_name: str) -> List[List[str]]:
     Returns:
         List[List[str]]: The 2D lists of matrix extracted from the file.
     '''
+
     try:
         file_path: Path = Path(__file__).parent / file_name
         matrix: List = []
