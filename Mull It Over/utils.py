@@ -1,5 +1,9 @@
 from typing import Tuple
 from pathlib import Path
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def read_input_from_file(file_name: str) -> str:

@@ -1,5 +1,9 @@
 from typing import List, Tuple
 from pathlib import Path
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def merge_sort(input_list: List[int]) -> List[int]:

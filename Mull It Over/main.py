@@ -1,7 +1,8 @@
-from typing import Pattern, List, Tuple, Generator
+from typing import Pattern, List, Generator
 import logging
-import utils
 import re
+import utils
+
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
